@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de estudio: Principio de Arquímedes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#eaf1f2;--card:#fff;--ink:#12303a;--mut:#5b7480;--line:#c9d9dd;--acc:#0b6f84;--acc2:#b8560f;--ok:#1b7a43;--bad:#b3261e;--soft:#dcebee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1f26;--card:#14303a;--ink:#e3f0f2;--mut:#9ab5bd;--line:#2a4a56;--acc:#4cc3da;--acc2:#f0a15f;--ok:#6fd39a;--bad:#ff8a80;--soft:#1b3d49}}
+:root[data-theme="dark"]{--bg:#0d1f26;--card:#14303a;--ink:#e3f0f2;--mut:#9ab5bd;--line:#2a4a56;--acc:#4cc3da;--acc2:#f0a15f;--ok:#6fd39a;--bad:#ff8a80;--soft:#1b3d49}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "IBM Plex Sans",system-ui,sans-serif}
+header{background:var(--acc);color:#fff;padding:22px 16px 18px}
+header .in,main{max-width:920px;margin:0 auto}
+header p{margin:0;font-size:15px;opacity:.92}
+header .name{font-weight:600;font-size:17px;margin-bottom:4px}
+h1{font:700 clamp(24px,5vw,34px)/1.15 "Source Serif 4",Georgia,serif;margin:6px 0 4px}
+main{padding:16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+h2{font:700 21px "Source Serif 4",Georgia,serif;margin:0 0 10px}
+h3{font-size:16px;margin:14px 0 4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{display:block;font-size:14px;font-weight:600;margin-bottom:3px}
+.row{display:flex;gap:6px}
+input,select,button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:7px;padding:8px 9px;min-width:0}
+input{flex:1;width:100%}
+button{cursor:pointer;font-weight:600}
+button.p{background:var(--acc);color:#fff;border-color:var(--acc)}
+:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.seg button{border-radius:0}.seg button:first-child{border-radius:7px 0 0 7px}.seg button:last-child{border-radius:0 7px 7px 0}
+.seg button[aria-pressed=true]{background:var(--acc);color:#fff}
+.eq{background:var(--soft);border-radius:7px;padding:8px 10px;margin:6px 0;overflow-x:auto;font-family:"Source Serif 4",Georgia,serif;font-size:17px;white-space:nowrap}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:12px}
+.res div{border:1px solid var(--line);border-radius:8px;padding:10px}
+.res b{display:block;font:700 20px "Source Serif 4",Georgia,serif;overflow-wrap:anywhere}
+.res span{font-size:13px;color:var(--mut)}
+.note{border-left:4px solid var(--acc2);padding:6px 10px;background:var(--soft);border-radius:0 7px 7px 0;margin:10px 0;font-size:15px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:6px;text-align:left}
+.wrap{overflow-x:auto}
+.fb{font-size:14px;margin-top:3px;min-height:20px}.ok{color:var(--ok)}.bad{color:var(--bad)}
+svg{width:100%;max-width:340px;height:auto;display:block;margin:8px auto}
+</style>
+</head>
+<body>
+<header><div class="in">
+<p class="name">Ing. Jhon Camacho Azan, Mgs</p>
+<h1>Principio de Arquímedes: esfera que se hunde</h1>
+<p>Diseño Hidráulico · Agropecuaria · Tercer ciclo · Guía de estudio</p>
+</div></header>
+<main>
+
+<section aria-labelledby="t1">
+<h2 id="t1">El problema</h2>
+<p>Una esfera sólida de densidad y tamaño dados se suelta en un estanque lleno de un líquido de densidad dada, a una profundidad dada. Calcula: <b>a)</b> peso, <b>b)</b> empuje, <b>c)</b> fuerza resultante, <b>d)</b> aceleración (sin rozamiento) y <b>e)</b> tiempo en llegar al fondo.</p>
+<div class="note">Los datos llegan en unidades distintas (g/cm³, pulgadas, pies). El primer paso siempre es convertir todo a un mismo sistema.</div>
+
+<h3>Tus datos</h3>
+<div class="grid">
+<div><label for="rs">Densidad del sólido</label><div class="row"><input id="rs" type="number" step="any" min="0"><select id="rsu" aria-label="Unidad densidad sólido"><option value="1">g/cm³</option><option value="0.001">kg/m³</option><option value="0.0160185">lb/ft³</option></select></div></div>
+<div><label for="rd" id="rdl">Radio de la esfera</label><div class="row"><input id="rd" type="number" step="any" min="0"><select id="rdu" aria-label="Unidad longitud"><option value="2.54">in</option><option value="1">cm</option><option value="100">m</option><option value="30.48">ft</option></select></div>
+<div class="seg" style="margin-top:6px"><button id="mr" aria-pressed="true" type="button">Radio</button><button id="md" aria-pressed="false" type="button">Diámetro</button></div></div>
+<div><label for="pf">Profundidad</label><div class="row"><input id="pf" type="number" step="any" min="0"><select id="pfu" aria-label="Unidad profundidad"><option value="0.3048">ft</option><option value="1">m</option><option value="0.0254">in</option><option value="0.01">cm</option></select></div></div>
+<div><label for="rl">Densidad del líquido</label><div class="row"><input id="rl" type="number" step="any" min="0"><select id="rlu" aria-label="Unidad densidad líquido"><option value="1">g/cm³</option><option value="0.001">kg/m³</option><option value="0.0160185">lb/ft³</option></select></div></div>
+</div>
+<div class="bar">
+<button class="p" id="calc" type="button">Resolver paso a paso</button>
+<button id="rand" type="button">Ejercicio aleatorio</button>
+<button id="ex" type="button">Ejemplo del Excel</button>
+<span>Fuerzas en:</span>
+<span class="seg"><button id="un" aria-pressed="true" type="button">Newton</button><button id="ud" aria-pressed="false" type="button">Dinas</button></span>
+</div>
+</section>
+
+<section id="sol" aria-live="polite" hidden>
+<h2>Solución</h2>
+<svg id="fig" viewBox="0 0 340 200" role="img" aria-label="Esfera dentro del líquido con flechas de peso y empuje"></svg>
+<div id="steps"></div>
+<div class="res" id="res"></div>
+</section>
+
+<section aria-labelledby="t3">
+<h2 id="t3">Ponte a prueba</h2>
+<p>Resuelve en tu cuaderno con los datos de arriba y escribe tus resultados (en las unidades elegidas: <b id="uf">N</b>, m/s², s). Se acepta un error de 1 %. Signo: hacia arriba es positivo.</p>
+<div class="grid" id="quiz"></div>
+<div class="bar"><button class="p" id="chk" type="button">Comprobar</button><b id="score"></b></div>
+<p style="font-size:14px;color:var(--mut)">Rúbrica de la tarea: a–d 1,5 pt cada una, e 2 pt (8 pt automáticos). Los 2 pt restantes son por el procedimiento, que califica el docente.</p>
+</section>
+
+<section aria-labelledby="t4">
+<h2 id="t4">Ideas clave y errores frecuentes</h2>
+<div class="wrap"><table>
+<tr><th>Concepto</th><th>Fórmula</th></tr>
+<tr><td>Volumen de la esfera</td><td>V = 4/3 · π · r³</td></tr>
+<tr><td>Peso</td><td>W = ρs · g · V</td></tr>
+<tr><td>Empuje (Arquímedes)</td><td>E = ρl · g · V</td></tr>
+<tr><td>Fuerza resultante</td><td>Fr = E − W</td></tr>
+<tr><td>Aceleración</td><td>a = Fr / m, con m = ρs · V</td></tr>
+<tr><td>Tiempo de caída</td><td>t = √(2h / |a|)</td></tr>
+<tr><td>Equivalencia</td><td>1 N = 100 000 dinas · g = 980 cm/s² = 9,8 m/s²</td></tr>
+</table></div>
+<ul>
+<li>Si el enunciado da el <b>diámetro</b>, divídelo entre 2 antes de usar r³. En la hoja de Excel la columna es radio.</li>
+<li>Convierte antes de calcular: 1 in = 2,54 cm, 1 ft = 0,3048 m.</li>
+<li>El empuje usa la densidad del <b>líquido</b>; el peso, la del <b>sólido</b>.</li>
+<li>Si ρs &lt; ρl la resultante es positiva: la esfera flota y no llega al fondo (no hay tiempo de caída).</li>
+<li>El volumen sale en cm³ si el radio está en cm y las densidades en g/cm³: entonces el peso queda en dinas.</li>
+</ul>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let useD=false,unitN=true,cur=null;
+const fmt=(x,d=6)=>Number(x).toLocaleString('es-EC',{maximumSignificantDigits:d});
+const fu=x=>unitN?x/1e5:x, U=()=>unitN?'N':'dinas';
+function setTog(a,b,on){$(a).setAttribute('aria-pressed',on);$(b).setAttribute('aria-pressed',!on)}
+$('mr').onclick=()=>{useD=false;setTog('mr','md',true);$('rdl').textContent='Radio de la esfera'};
+$('md').onclick=()=>{useD=true;setTog('mr','md',false);$('rdl').textContent='Diámetro de la esfera'};
+$('un').onclick=()=>{unitN=true;setTog('un','ud',true);refresh()};
+$('ud').onclick=()=>{unitN=false;setTog('un','ud',false);refresh()};
+function setVals(a,r,h,b){$('rs').value=a;$('rd').value=r;$('pf').value=h;$('rl').value=b;$('rsu').value=1;$('rlu').value=1;$('rdu').value=2.54;$('pfu').value=0.3048;$('mr').click();solve()}
+$('ex').onclick=()=>setVals(71.7,17,13,13.9);
+$('rand').onclick=()=>{const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;setVals(R(300,800)/10,R(3,20),R(5,50),R(20,200)/10)};
+$('calc').onclick=solve;
+function calc(){
+ const rs=+$('rs').value*+$('rsu').value, rl=+$('rl').value*+$('rlu').value;
+ let L=+$('rd').value*+$('rdu').value; if(useD)L/=2;
+ const h=+$('pf').value*+$('pfu').value;
+ if(!(rs>0&&rl>=0&&L>0&&h>0))return null;
+ const V=4/3*Math.PI*L**3, W=rs*980*V, E=rl*980*V, F=E-W, m=rs*V/1000, a=(F/1e5)/m;
+ return {rs,rl,L,h,V,W,E,F,m,a,t:a<0?Math.sqrt(2*h/-a):null};
+}
+function solve(){
+ const c=calc(); if(!c){alert('Completa las cuatro casillas con valores mayores que cero.');return}
+ cur=c;$('sol').hidden=false;refresh();
+}
+function refresh(){
+ $('uf').textContent=U(); buildQuiz();
+ if(!cur)return; const c=cur, u=U(), sink=c.F<0;
+ const s=(t,eq,val)=>`<h3>${t}</h3><div class="eq">${eq}</div>${val?`<p>${val}</p>`:''}`;
+ $('steps').innerHTML=
+  s('0. Convertir unidades',`ρs = ${fmt(c.rs)} g/cm³ · ρl = ${fmt(c.rl)} g/cm³`,`Radio: <b>${fmt(c.L)} cm</b> · Profundidad: <b>${fmt(c.h*100)} cm</b> (${fmt(c.h)} m).`)+
+  s('Volumen',`V = 4/3 · π · (${fmt(c.L)})³ = ${fmt(c.V)} cm³`)+
+  s('a) Peso',`W = ρs · g · V = ${fmt(c.rs)} · 980 · ${fmt(c.V)} = ${fmt(c.W)} dinas`,`<b>W = ${fmt(fu(c.W))} ${u}</b> (${fmt(c.W/1e5)} N)`)+
+  s('b) Empuje',`E = ρl · g · V = ${fmt(c.rl)} · 980 · ${fmt(c.V)} = ${fmt(c.E)} dinas`,`<b>E = ${fmt(fu(c.E))} ${u}</b> (${fmt(c.E/1e5)} N)`)+
+  s('c) Fuerza resultante',`Fr = E − W = ${fmt(fu(c.E))} − ${fmt(fu(c.W))}`,`<b>Fr = ${fmt(fu(c.F))} ${u}</b> ${sink?'(negativa: hacia abajo, la esfera se hunde)':'(positiva: hacia arriba, la esfera flota)'}`)+
+  s('d) Aceleración',`m = ρs · V = ${fmt(c.m)} kg · a = Fr / m = ${fmt(c.F/1e5)} N / ${fmt(c.m)} kg`,`<b>a = ${fmt(c.a)} m/s²</b>`)+
+  (sink?s('e) Tiempo hasta el fondo',`t = √(2h / |a|) = √(2 · ${fmt(c.h)} / ${fmt(Math.abs(c.a))})`,`<b>t = ${fmt(c.t)} s</b>`)
+   :`<div class="note"><b>e)</b> Como E &gt; W la esfera sube y no llega al fondo: no existe tiempo de caída. Prueba con una densidad de sólido mayor que la del líquido.</div>`);
+ $('res').innerHTML=[['Peso',fmt(fu(c.W),5)+' '+u],['Empuje',fmt(fu(c.E),5)+' '+u],['Fuerza resultante',fmt(fu(c.F),5)+' '+u],['Aceleración',fmt(c.a,5)+' m/s²'],['Tiempo',c.t?fmt(c.t,5)+' s':'no cae']].map(x=>`<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+ const k=Math.min(1,c.E/c.W), wl=20+70*Math.min(1,c.W/Math.max(c.W,c.E)), el=20+70*Math.min(1,c.E/Math.max(c.W,c.E));
+ $('fig').innerHTML=`<rect x="20" y="10" width="300" height="180" rx="6" fill="var(--soft)" stroke="var(--line)"/><circle cx="170" cy="100" r="34" fill="var(--acc2)" opacity=".85"/>
+ <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="var(--ink)"/></marker></defs>
+ <line x1="170" y1="100" x2="170" y2="${100+wl}" stroke="var(--ink)" stroke-width="3" marker-end="url(#ar)"/><line x1="170" y1="100" x2="170" y2="${100-el}" stroke="var(--acc)" stroke-width="3" marker-end="url(#ar)"/>
+ <text x="182" y="${100+wl}" fill="var(--ink)" font-size="14">W</text><text x="182" y="${100-el+8}" fill="var(--acc)" font-size="14">E</text>`;
+}
+function buildQuiz(){
+ const items=[['Peso W ('+U()+')','w'],['Empuje E ('+U()+')','e'],['Fuerza resultante Fr ('+U()+')','f'],['Aceleración a (m/s²)','a'],['Tiempo t (s)','t']];
+ const old={};document.querySelectorAll('#quiz input').forEach(i=>old[i.id]=i.value);
+ $('quiz').innerHTML=items.map(x=>`<div><label for="q${x[1]}">${x[0]}</label><input id="q${x[1]}" type="number" step="any" value="${old['q'+x[1]]||''}"><div class="fb" id="f${x[1]}"></div></div>`).join('');
+ $('score').textContent='';
+}
+$('chk').onclick=()=>{
+ const c=cur||calc(); if(!c){alert('Primero ingresa los datos y pulsa "Resolver paso a paso".');return}
+ cur=c;const ans={w:fu(c.W),e:fu(c.E),f:fu(c.F),a:c.a,t:c.t},pts={w:1.5,e:1.5,f:1.5,a:1.5,t:2};let tot=0;
+ for(const k in ans){const v=parseFloat($('q'+k).value),f=$('f'+k),r=ans[k];
+  if(r===null){f.className='fb';f.textContent='No aplica: la esfera no llega al fondo.';tot+=pts[k]*(isNaN(v)?1:1);continue}
+  if(isNaN(v)){f.className='fb bad';f.textContent='Falta tu respuesta.';continue}
+  if(Math.abs(v-r)<=Math.abs(r)*0.01){tot+=pts[k];f.className='fb ok';f.textContent='Correcto: '+fmt(r,5)}
+  else{f.className='fb bad';f.textContent=Math.abs(Math.abs(v)-Math.abs(r))<=Math.abs(r)*0.01?'Revisa el signo (hacia abajo es negativo).':'Revisa unidades y conversiones. Esperado: '+fmt(r,5)}}
+ $('score').textContent='Puntaje automático: '+tot.toFixed(1)+' / 8';
+};
+buildQuiz();
+</script>
+</body>
+</html>
